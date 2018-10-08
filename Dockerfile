@@ -1,12 +1,15 @@
-FROM node:10.11.0
+FROM nginx
 
-ENV NPM_CONFIG_LOGLEVEL warn
-COPY . .
+# remove Nginx's samples defaults
+RUN rm -f /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html
+RUN mkdir /etc/nginx/logs
 
-RUN npm install react-scripts
-RUN npm run build --production
-RUN npm install -g serve
+# copy real application's configuration
+COPY nginx.conf /etc/nginx/conf.d/
 
-CMD serve -s build
+# copy production-ready static assets
+COPY build/ /usr/share/nginx/nps-frontend
 
-EXPOSE 5000
+EXPOSE 80/tcp/
+EXPOSE 80/udp/

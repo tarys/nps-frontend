@@ -5,8 +5,23 @@ import './App.css';
 
 const RATING_MAX = 10;
 
+
+function sendToServer(nps) {
+    fetch(window.location.origin + '/topics/jsontest', {
+        method: 'POST',
+        mode: "cors",
+        headers: {
+            "Content-Type": "application/vnd.kafka.json.v2+json",
+            "Accept": "application/vnd.kafka.v2+json",
+        },
+        body: "{\"records\":[{\"value\":{\"nps\":" + nps + "}}]}"
+    }).catch(err => console.log(err))
+}
+
 function handleClick(event) {
-    console.log(event.target.value)
+    const nps = event.target.value;
+    console.log("NPS clicked: " + nps);
+    sendToServer(nps);
 }
 
 class App extends Component {
