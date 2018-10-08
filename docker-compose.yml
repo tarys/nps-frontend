@@ -192,5 +192,12 @@ services:
     ports:
      - "5601:5601"
 
+  nps-frontend:
+    image: "nps-frontend:latest"
+    ports:
+    - "8080:80"
+    depends_on:
+    - rest-proxy
+
 volumes:
     mi2: {}
