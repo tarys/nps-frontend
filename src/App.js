@@ -14,7 +14,15 @@ function sendToServer(nps) {
             "Content-Type": "application/vnd.kafka.json.v2+json",
             "Accept": "application/vnd.kafka.v2+json",
         },
-        body: "{\"records\":[{\"value\":{\"nps\":" + nps + "}}]}"
+        body: JSON.stringify({
+            records: [
+                {
+                    value: {
+                        nps: parseInt(nps),
+                    }
+                }
+            ]
+        })
     }).catch(err => console.log(err))
 }
 
