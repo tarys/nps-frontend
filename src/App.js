@@ -3,11 +3,12 @@ import {Button} from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const RATING_MAX = 10;
+
+const TOPIC_NAME = 'nps';
 
 
 function sendToServer(nps) {
-    fetch(window.location.origin + '/topics/jsontest', {
+    fetch(window.location.origin + '/topics/' + TOPIC_NAME, {
         method: 'POST',
         mode: "cors",
         headers: {
@@ -37,7 +38,7 @@ class App extends Component {
         return (
             <div className="App">
                 <p>Welcome!</p>
-                <p>Please, rate us with values from 1 to {RATING_MAX}, where:</p>
+                <p>Please, rate us with values from 1 to 10, where:</p>
                 <ul>
                     <li>1 - completely unsatisfied</li>
                     <li>10 - totally satisfied</li>
