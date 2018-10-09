@@ -71,10 +71,10 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
-      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -103,17 +103,22 @@ services:
 
   elasticsearch:
     image: "elasticsearch:latest"
+    container_name: elasticsearch
     ports:
      - "9200:9200"
      - "9300:9300"
 
   kibana:
     image: "kibana:latest"
+    container_name: kibana
     ports:
      - "5601:5601"
+    depends_on:
+     - elasticsearch
 
   nps-frontend:
     image: "nps-frontend:latest"
+    container_name: nps-frontend
     ports:
     - "8080:80"
     depends_on:
