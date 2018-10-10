@@ -34,18 +34,6 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
 
-  schema-registry:
-    image: confluentinc/cp-schema-registry:5.0.0
-    hostname: schema-registry
-    container_name: schema-registry
-    depends_on:
-      - zookeeper
-      - broker
-    ports:
-      - "8081:8081"
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
 
   connect:
     image: confluentinc/cp-kafka-connect:5.0.0
@@ -54,7 +42,6 @@ services:
     depends_on:
       - zookeeper
       - broker
-      - schema-registry
     ports:
       - "8083:8083"
     volumes:
@@ -90,7 +77,6 @@ services:
     depends_on:
       - zookeeper
       - broker
-      - schema-registry
     ports:
       - 8082:8082
     hostname: rest-proxy
@@ -99,7 +85,6 @@ services:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:9092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
-      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
 
   elasticsearch:
