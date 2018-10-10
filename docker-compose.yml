@@ -101,6 +101,7 @@ services:
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
+
   elasticsearch:
     image: "elasticsearch:6.4.2"
     container_name: elasticsearch
@@ -110,21 +111,45 @@ services:
     environment:
       cluster.name: "elasticsearch"
 
+
   kibana:
     image: "kibana:6.4.2"
     container_name: kibana
+    depends_on:
+    - elasticsearch
     ports:
      - "5601:5601"
+
+
+  nps-backend:
+    image: "tarys/nps-backend:latest"
+    container_name: nps-backend
     depends_on:
-     - elasticsearch
+    - broker
+    - elasticsearch
+    ports:
+    - "1940:1940"
+    environment:
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: "broker:9092"
+      SPRING_KAFKA_CONSUMER_GROUP_ID: "java-consumers"
+      SPRING_KAFKA_CONSUMER_CLIENT-ID: "java-client-1"
+      SPRING_KAFKA_CONSUMER_AUTO-OFFSET-RESET: "earliest"
+      SPRING_KAFKA_CONSUMER_ENABLE_AUTO_COMMIT: "false"
+      SPRING_KAFKA_CONSUMER_KEY_DESERIALIZER: "org.apache.kafka.common.serialization.StringDeserializer"
+      SPRING_KAFKA_CONSUMER_VALUE_DESERIALIZER: "org.apache.kafka.common.serialization.StringDeserializer"
+      SPRING_ELASTICSEARCH_HOST: "elasticsearch"
+      SPRING_ELASTICSEARCH_PORT: 9200
+      SPRING_ELASTICSEARCH_SCHEMA: "http"
+
 
   nps-frontend:
-    image: "nps-frontend:latest"
+    image: "tarys/nps-frontend:latest"
     container_name: nps-frontend
-    ports:
-    - "8080:80"
     depends_on:
     - rest-proxy
+    ports:
+    - "8080:80"
+
 
 volumes:
     mi2: {}
