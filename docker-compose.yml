@@ -103,7 +103,7 @@ services:
 
 
   elasticsearch:
-    image: "elasticsearch:6.4.2"
+    image: elasticsearch:6.4.2
     container_name: elasticsearch
     ports:
      - "9200:9200"
@@ -113,7 +113,7 @@ services:
 
 
   kibana:
-    image: "kibana:6.4.2"
+    image: kibana:6.4.2
     container_name: kibana
     depends_on:
     - elasticsearch
@@ -122,7 +122,7 @@ services:
 
 
   nps-backend:
-    image: "tarys/nps-backend:latest"
+    image: tarys/nps-backend:0.1.0
     container_name: nps-backend
     depends_on:
     - broker
@@ -143,7 +143,7 @@ services:
 
 
   nps-frontend:
-    image: "tarys/nps-frontend:latest"
+    image: tarys/nps-frontend:0.1.0
     container_name: nps-frontend
     depends_on:
     - rest-proxy
