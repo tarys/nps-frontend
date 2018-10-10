@@ -102,14 +102,16 @@ services:
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
   elasticsearch:
-    image: "elasticsearch:latest"
+    image: "elasticsearch:6.4.2"
     container_name: elasticsearch
     ports:
      - "9200:9200"
      - "9300:9300"
+    environment:
+      cluster.name: "elasticsearch"
 
   kibana:
-    image: "kibana:latest"
+    image: "kibana:6.4.2"
     container_name: kibana
     ports:
      - "5601:5601"
