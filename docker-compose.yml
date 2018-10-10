@@ -58,7 +58,7 @@ services:
     ports:
       - "8083:8083"
     volumes:
-      - mi2:/usr/share/java/monitoring-interceptors/
+      - /usr/share/java/monitoring-interceptors/
     environment:
       CONNECT_BOOTSTRAP_SERVERS: 'broker:9092'
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
@@ -149,7 +149,3 @@ services:
     - rest-proxy
     ports:
     - "8080:80"
-
-
-volumes:
-    mi2: {}
