@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nps-backend
+  name: nps-backend
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nps-backend
+    spec:
+      containers:
+      - env:
+        - name: SPRING_ELASTICSEARCH_HOST
+          value: elasticsearch
+        - name: SPRING_ELASTICSEARCH_PORT
+          value: "9200"
+        - name: SPRING_ELASTICSEARCH_SCHEMA
+          value: http
+        - name: SPRING_KAFKA_CONSUMER_AUTO-OFFSET-RESET
+          value: earliest
+        - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+          value: broker:9092
+        - name: SPRING_KAFKA_CONSUMER_CLIENT-ID
+          value: java-client-1
+        - name: SPRING_KAFKA_CONSUMER_ENABLE_AUTO_COMMIT
+          value: "false"
+        - name: SPRING_KAFKA_CONSUMER_GROUP_ID
+          value: java-consumers
+        - name: SPRING_KAFKA_CONSUMER_KEY_DESERIALIZER
+          value: org.apache.kafka.common.serialization.StringDeserializer
+        - name: SPRING_KAFKA_CONSUMER_VALUE_DESERIALIZER
+          value: org.apache.kafka.common.serialization.StringDeserializer
+        image: tarys/nps-backend:0.1.0
+        name: nps-backend
+        ports:
+        - containerPort: 1940
+        resources: {}
+      restartPolicy: Always
+status: {}

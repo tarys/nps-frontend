@@ -1,0 +1,83 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: connect
+  name: connect
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: connect
+    spec:
+      containers:
+      - env:
+        - name: CLASSPATH
+          value: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.0.0.jar
+        - name: CONNECT_BOOTSTRAP_SERVERS
+          value: broker:9092
+        - name: CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR
+          value: "1"
+        - name: CONNECT_CONFIG_STORAGE_TOPIC
+          value: docker-connect-configs
+        - name: CONNECT_CONSUMER_INTERCEPTOR_CLASSES
+          value: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+        - name: CONNECT_GROUP_ID
+          value: compose-connect-group
+        - name: CONNECT_INTERNAL_KEY_CONVERTER
+          value: org.apache.kafka.connect.json.JsonConverter
+        - name: CONNECT_INTERNAL_VALUE_CONVERTER
+          value: org.apache.kafka.connect.json.JsonConverter
+        - name: CONNECT_KEY_CONVERTER
+          value: org.apache.kafka.connect.json.JsonConverter
+        - name: CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE
+          value: "false"
+        - name: CONNECT_LOG4J_LOGGERS
+          value: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+        - name: CONNECT_OFFSET_FLUSH_INTERVAL_MS
+          value: "10000"
+        - name: CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR
+          value: "1"
+        - name: CONNECT_OFFSET_STORAGE_TOPIC
+          value: docker-connect-offsets
+        - name: CONNECT_PLUGIN_PATH
+          value: /usr/share/java
+        - name: CONNECT_PRODUCER_INTERCEPTOR_CLASSES
+          value: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+        - name: CONNECT_REST_ADVERTISED_HOST_NAME
+          value: connect
+        - name: CONNECT_REST_PORT
+          value: "8083"
+        - name: CONNECT_STATUS_STORAGE_REPLICATION_FACTOR
+          value: "1"
+        - name: CONNECT_STATUS_STORAGE_TOPIC
+          value: docker-connect-status
+        - name: CONNECT_VALUE_CONVERTER
+          value: org.apache.kafka.connect.json.JsonConverter
+        - name: CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE
+          value: "false"
+        - name: CONNECT_ZOOKEEPER_CONNECT
+          value: zookeeper:2181
+        image: confluentinc/cp-kafka-connect:5.0.0
+        name: connect
+        ports:
+        - containerPort: 8083
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/share/java/monitoring-interceptors/
+          name: connect-claim0
+      hostname: connect
+      restartPolicy: Always
+      volumes:
+      - name: connect-claim0
+        persistentVolumeClaim:
+          claimName: connect-claim0
+status: {}
