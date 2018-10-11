@@ -2,9 +2,7 @@
 
 curl -X POST \
   http://localhost:8083/connectors \
-  -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 556ef0b3-4f68-4666-a0e2-05177d546adb' \
   -d '{
   "name": "nps-elasticsearch-sink",
   "config": {
