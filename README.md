@@ -19,3 +19,5 @@ Sample React.js based app for Docker-compose and Kubernetes demonstration.
    ```
    docker-compose down
    ```
+Sources of related backend app:
+https://github.com/tarys/nps-backend
